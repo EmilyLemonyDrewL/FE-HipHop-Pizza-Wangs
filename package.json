@@ -1,8 +1,8 @@
 {
-  "name": "next-firebase-starter",
+  "name": "hiphop-pizza-wangs",
   "private": true,
   "version": "1.0.0",
-  "author": "Trinity Christiana",
+  "author": "Emily Drew L.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
