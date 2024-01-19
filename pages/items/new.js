@@ -36,7 +36,7 @@ const MenuList = () => {
       <h2>Menu</h2>
       <div className="menu-cards">
         {items.map((item) => (
-          <MenuCard key={item.id} item={item} />
+          <MenuCard key={item.id} itemObj={item} />
         ))}
       </div>
     </div>
