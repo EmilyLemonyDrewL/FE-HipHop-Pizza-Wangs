@@ -30,6 +30,32 @@ const deleteOrderItem = (order, payload) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
+const createOrderItem = (orderItem) => new Promise((resolve, reject) => {
+  fetch(`${clientCredentials.databaseURL}/order_items`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(orderItem),
+  })
+    .then((response) => response.json())
+    .then(resolve)
+    .catch(reject);
+});
+
+const updateOrderItem = (orderItem) => new Promise((resolve, reject) => {
+  fetch(`${clientCredentials.databaseURL}/oreder_items`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(orderItem),
+  })
+    .then((response) => response.json())
+    .then(resolve)
+    .catch(reject);
+});
+
 export {
-  getOrderItems, deleteOrderItem,
+  getOrderItems, deleteOrderItem, createOrderItem, updateOrderItem,
 };

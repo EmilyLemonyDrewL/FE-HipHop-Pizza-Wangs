@@ -1,37 +1,67 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Button, Form } from 'react-bootstrap';
 import PropTypes from 'prop-types';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
+import { useRouter } from 'next/router';
+import { createOrderItem } from '../utils/data/orderItemData';
+import getItems from '../utils/data/itemData';
 
-const AddItemForm = ({ items, onAddItem }) => {
+const AddToOrderForm = ({ orderId }) => {
+  const [items, setItems] = useState([]);
   const [selectedItem, setSelectedItem] = useState('');
   const [quantity, setQuantity] = useState(1);
+  const router = useRouter();
 
-  const HandleItemChange = (e) => {
-    setSelectedItem(e.target.value);
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        const fetchedItems = await getItems();
+        setItems(fetchedItems);
+      } catch (error) {
+        console.error('Error fetching items:', error.message);
+      }
+    };
+
+    fetchItems();
+  }, []);
+
+  const handleItemChange = (event) => {
+    setSelectedItem(event.target.value);
   };
 
-  const handleQuantityChange = (e) => {
-    setQuantity(Number(e.target.value));
+  const handleQuantityChange = (event) => {
+    setQuantity(Number(event.target.value));
   };
 
-  const handleAddItem = () => {
-    onAddItem(selectedItem, quantity);
-    setSelectedItem('');
-    setQuantity(1);
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    if (selectedItem) {
+      try {
+        await createOrderItem({
+          order: orderId,
+          item: selectedItem,
+          quantity,
+        });
+        router.push(`/orders/${orderId}`);
+      } catch (error) {
+        console.error('Error creating order item', error);
+      }
+
+      // This clears the form's state after submitting
+      setSelectedItem('');
+      setQuantity(1);
+    }
   };
 
   return (
-    <Form>
+    <Form onSubmit={handleSubmit}>
       <Form.Group className="mb-3">
-        <Form.Label>Selected Item</Form.Label>
-        <Form.Control as="select" value={selectedItem} onChange={HandleItemChange}>
-          <option value="" disabled>Select items</option>
+        <Form.Label>Select Item</Form.Label>
+        <Form.Control as="select" value={selectedItem} onChange={handleItemChange}>
+          <option value="" disabled>Select an item</option>
           {items.map((item) => (
             <option key={item.id} value={item.id}>
-              {item.name}
-              {item.description}
-              {item.price}
+              {item.name} - ${item.price}
             </option>
           ))}
         </Form.Control>
@@ -43,27 +73,17 @@ const AddItemForm = ({ items, onAddItem }) => {
           type="number"
           value={quantity}
           onChange={handleQuantityChange}
-          min="1"
+          min={1}
         />
       </Form.Group>
 
-      <Button type="submit" onClick={handleAddItem}>
-        Add Item
-      </Button>
+      <Button type="submit">Add Item to Order</Button>
     </Form>
   );
 };
 
-AddItemForm.propTypes = {
-  items: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      description: PropTypes.string.isRequired,
-      price: PropTypes.number.isRequired,
-    }),
-  ).isRequired,
-  onAddItem: PropTypes.func.isRequired,
+AddToOrderForm.propTypes = {
+  orderId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
 };
 
-export default AddItemForm;
+export default AddToOrderForm;

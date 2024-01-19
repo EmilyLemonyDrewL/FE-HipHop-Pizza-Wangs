@@ -4,6 +4,10 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 
 export default function MenuCard({ itemObj, handleChoice }) {
+  if (!itemObj) {
+    return null;
+  }
+
   return (
     <Card>
       <Card.Body>
