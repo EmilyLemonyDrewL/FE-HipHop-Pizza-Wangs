@@ -25,18 +25,27 @@ const OrderCard = ({
     router.push(`/orders/edit/${id}`);
   }
 
+  function endOrder() {
+    router.push(`orders/close/${id}`);
+  }
+
   return (
-    <Card className="text-center">
+    <Card className="text-center" style={{ width: '18rem', margin: '10px' }}>
       <h4>Order Status: {status}</h4>
       <Card.Body>
         {/* eslint-disable-next-line camelcase */}
         <Card.Text>Customer name: {customer_name}</Card.Text>
       </Card.Body>
       <Link href={`/orders/${id}`} passHref>
-        <Button>Details</Button>
+        <Button variant="btn btn-dark">Details</Button>
       </Link>
-      <Button onClick={deleteThisOrder}>Cancel Order</Button>
-      <Button type="edit" onClick={() => editOrder(id)}> Edit Order Details</Button>
+      {status === 'Open' && (
+        <>
+          <Button variant="btn btn-dark" onClick={deleteThisOrder}>Cancel Order</Button>
+          <Button variant="btn btn-dark" type="edit" onClick={() => editOrder(id)}> Edit Order Details</Button>
+          <Button variant="btn btn-dark" type="close" onClick={() => endOrder(id)}> Close</Button>
+        </>
+      )}
     </Card>
   );
 };

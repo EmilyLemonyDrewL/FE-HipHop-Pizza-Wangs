@@ -33,7 +33,7 @@ function SingleOrder() {
           )}
         </div>
         <Link href={`/items/new?orderId=${orderone}`} passHref>
-          <Button>Add Item</Button>
+          <Button variant="btn btn-dark">Add Item</Button>
         </Link>
       </div>
     </article>

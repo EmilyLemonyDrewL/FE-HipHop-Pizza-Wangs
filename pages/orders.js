@@ -20,6 +20,7 @@ function Orders() {
   return (
     <article className="orders">
       <Button
+        variant="btn btn-dark"
         onClick={() => {
           router.push('/orders/new');
         }}
@@ -27,11 +28,13 @@ function Orders() {
         New Order
       </Button>
       <h1>Orders</h1>
-      {orders.map((order) => (
-        <section key={`order--${order.id}`} className="order">
-          <OrderCard id={order.id} customer_name={order.customer_name} status={order.status} onUpdate={showOrders} />
-        </section>
-      ))}
+      <div className="d-flex flex-wrap">
+        {orders.map((order) => (
+          <section key={`order--${order.id}`} className="order">
+            <OrderCard id={order.id} customer_name={order.customer_name} status={order.status} onUpdate={showOrders} />
+          </section>
+        ))}
+      </div>
     </article>
   );
 }

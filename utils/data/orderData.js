@@ -62,30 +62,19 @@ const updateOrder = (payload) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
-// const updateOrder = (payload) => new Promise((resolve, reject) => {
-//   fetch(`${clientCredentials.databaseURL}/orders/${payload.id}`, {
-//     method: 'PUT',
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify(payload),
-//   })
-//     .then((response) => {
-//       console.log('Server response:', response);
-//       if (!response.ok) {
-//         throw new Error(`Failed to update order. Status: ${response.status}`);
-//       }
-//       return response.json();
-//     })
-//     .then((data) => {
-//       console.log('Update success. Data:', data);
-//       resolve(data);
-//     })
-//     .catch((error) => {
-//       console.error('Error updating order:', error.message);
-//       reject(error);
-//     });
-// });
+const closeOutOrder = (order) => fetch(`${clientCredentials.databaseURL}/orders/${order.id}/close`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(order),
+})
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error(`Failed to close order. Status: ${response.status}`);
+    }
+    return response.json(); // Parse the JSON response
+  });
 
 const deleteOrder = (id) => new Promise((resolve, reject) => {
   fetch(`${clientCredentials.databaseURL}/orders/${id}`, {
@@ -100,5 +89,5 @@ const deleteOrder = (id) => new Promise((resolve, reject) => {
 
 // eslint-disable-next-line import/prefer-default-export
 export {
-  getOrders, getSingleOrder, createOrder, updateOrder, deleteOrder, getSingleOrderItems,
+  getOrders, getSingleOrder, createOrder, updateOrder, deleteOrder, getSingleOrderItems, closeOutOrder,
 };

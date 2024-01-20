@@ -135,7 +135,7 @@ const OrderForm = ({ obj }) => {
         />
       </FloatingLabel>
 
-      <Button type="Submit">{obj.id ? 'Update' : 'Create'} Order</Button>
+      <Button variant="btn btn-dark" type="Submit">{obj.id ? 'Update' : 'Create'} Order</Button>
     </Form>
   );
 };

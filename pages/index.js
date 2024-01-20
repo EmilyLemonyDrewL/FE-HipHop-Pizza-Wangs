@@ -1,4 +1,4 @@
-import { Button } from 'react-bootstrap';
+import { Button, Image } from 'react-bootstrap';
 import Link from 'next/link';
 import { useAuth } from '../utils/context/authContext';
 
@@ -14,17 +14,16 @@ function Home() {
         margin: '0 auto',
       }}
     >
-      <p1>Logo image will go here</p1>
+      <Image src="https://user-images.githubusercontent.com/29741570/205346767-a182560c-64a6-4cfa-80b3-0d64cf998242.png" roundedCircle />
       <h1>Hello {user.fbUser.displayName}! </h1>
-      <p>Click the button below to logout!</p>
       <Link href="/orders" passHref>
-        <Button>View Orders</Button>
+        <Button variant="btn btn-dark">View Orders</Button>
       </Link>
       <Link href="/orders/new" passHref>
-        <Button>Create Order</Button>
+        <Button variant="btn btn-dark">Create Order</Button>
       </Link>
       <Link href="/revenue" passHref>
-        <Button>View Revenue</Button>
+        <Button variant="btn btn-dark">View Revenue</Button>
       </Link>
     </div>
   );

@@ -21,7 +21,7 @@ function RegisterForm({ user, updateUser }) {
         <Form.Label>Cashier Name</Form.Label>
         <Form.Control type="text" name="name" required placeholder="Enter your name" onChange={({ target }) => setFormData((prev) => ({ ...prev, [target.name]: target.value }))} />
       </Form.Group>
-      <Button variant="primary" type="submit">
+      <Button variant="btn btn-dark" type="submit">
         Submit
       </Button>
     </Form>
