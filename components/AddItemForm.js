@@ -77,7 +77,7 @@ const AddToOrderForm = ({ orderId }) => {
         />
       </Form.Group>
 
-      <Button type="submit">Add Item to Order</Button>
+      <Button variant="btn btn-dark" type="submit">Add Item to Order</Button>
     </Form>
   );
 };

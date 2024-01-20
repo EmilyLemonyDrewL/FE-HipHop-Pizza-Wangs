@@ -9,6 +9,10 @@ const MenuList = () => {
   const { orderId } = router.query;
   const [items, setItems] = useState([]);
 
+  const handleChoice = (itemObj) => {
+    console.log('Chosen item:', itemObj);
+  };
+
   if (!orderId) {
     return <p>Loading...</p>;
   }
@@ -34,9 +38,9 @@ const MenuList = () => {
         <AddToOrderForm orderId={orderId} />
       </div>
       <h2>Menu</h2>
-      <div className="menu-cards">
+      <div className="d-flex flex-wrap">
         {items.map((item) => (
-          <MenuCard key={item.id} itemObj={item} />
+          <MenuCard key={item.id} itemObj={item} handleChoice={handleChoice} />
         ))}
       </div>
     </div>

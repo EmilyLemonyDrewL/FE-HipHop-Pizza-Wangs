@@ -16,12 +16,12 @@ export default function ItemCard({ itemObj, order }) {
   };
 
   return (
-    <Card className="text-center">
+    <Card className="text-center" style={{ width: '18rem', margin: '10px' }}>
       <Card.Body>
         <Card.Header>{itemObj.name}</Card.Header>
         <Card.Text>{itemObj.description}</Card.Text>
         <Card.Text>Price: $ {itemObj.price}</Card.Text>
-        <Button onClick={deleteThisItem}>Delete</Button>
+        <Button variant="btn btn-dark" onClick={deleteThisItem}>Delete</Button>
       </Card.Body>
     </Card>
   );

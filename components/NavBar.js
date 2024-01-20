@@ -13,9 +13,6 @@ export default function NavBar() {
   return (
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
       <Container>
-        <Link passHref href="/">
-          <Navbar.Brand>CHANGE ME</Navbar.Brand>
-        </Link>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
@@ -29,7 +26,7 @@ export default function NavBar() {
             <Link passHref href="/orders/new">
               <Nav.Link>Create Order</Nav.Link>
             </Link>
-            <Button variant="danger" onClick={signOut}>
+            <Button variant="btn btn-dark" onClick={signOut}>
               Sign Out
             </Button>
           </Nav>
