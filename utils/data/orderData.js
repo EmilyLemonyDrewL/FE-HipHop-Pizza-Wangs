@@ -94,7 +94,28 @@ const deleteOrder = (id) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
+const getAllClosedOrders = () => new Promise((resolve, reject) => {
+  fetch(`${clientCredentials.databaseURL}/orders?status=Closed`)
+    .then((response) => response.json())
+    .then(resolve)
+    .catch(reject);
+});
+
+const getItemsByOrderId = async (orderId) => {
+  try {
+    const response = await fetch(`${clientCredentials.databaseURL}/order_items`);
+    const orderItems = await response.json();
+
+    const itemsForOrder = orderItems.filter((item) => item.order === orderId);
+
+    return itemsForOrder;
+  } catch (error) {
+    console.error('Error fetching order items:', error);
+    throw error;
+  }
+};
+
 // eslint-disable-next-line import/prefer-default-export
 export {
-  getOrders, getSingleOrder, createOrder, updateOrder, deleteOrder, getSingleOrderItems, closeOutOrder,
+  getOrders, getSingleOrder, createOrder, updateOrder, deleteOrder, getSingleOrderItems, closeOutOrder, getAllClosedOrders, getItemsByOrderId,
 };
