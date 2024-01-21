@@ -9,9 +9,7 @@ const FinishOrder = () => {
   const [closedOrder, setClosedOrder] = useState({});
 
   useEffect(() => {
-    console.log('orderId:', orderId);
     getSingleOrder(orderId).then((data) => {
-      console.log('closedOrder:', data);
       setClosedOrder(data);
     });
   }, [orderId]);

@@ -10,6 +10,7 @@ const MenuList = () => {
   const [items, setItems] = useState([]);
 
   const handleChoice = (itemObj) => {
+    // eslint-disable-next-line no-console
     console.log('Chosen item:', itemObj);
   };
 

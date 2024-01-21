@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
+import { useRouter } from 'next/router';
 import { updateOrder } from '../utils/data/orderData';
 import { useAuth } from '../utils/context/authContext';
 
@@ -8,6 +9,7 @@ const CloseOrderForm = ({ orderObj }) => {
   const [paymentType, setPaymentType] = useState('');
   const [tipAmount, setTipAmount] = useState(0);
   const { user } = useAuth();
+  const router = useRouter();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -27,7 +29,7 @@ const CloseOrderForm = ({ orderObj }) => {
 
     updateOrder(orderUpdate)
       .then(() => {
-        // write a message that handles succeful update
+        router.push('/orders');
       })
       .catch((error) => {
         console.error('Error updating order:', error);
