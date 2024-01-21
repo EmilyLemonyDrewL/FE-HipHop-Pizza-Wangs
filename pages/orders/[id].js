@@ -21,6 +21,12 @@ function SingleOrder() {
         <p>Phone: {singleOrder.customer_phone}</p>
         <p>Email: {singleOrder.customer_email}</p>
         <p>Order type: {singleOrder.order_type}</p>
+        {singleOrder.status === 'Closed' && (
+          <>
+            <p>Date closed: {singleOrder.date_of_order_closure}</p>
+            <p>Payment type: {singleOrder.payment_type}</p>
+          </>
+        )}
       </div>
       <div>
         <div className="d-flex flex-wrap">
@@ -32,9 +38,14 @@ function SingleOrder() {
             <p>No items found</p>
           )}
         </div>
-        <Link href={`/items/new?orderId=${orderId}`} passHref>
-          <Button variant="btn btn-dark">Add Item</Button>
-        </Link>
+
+        {singleOrder.status === 'Open' && (
+          <>
+            <Link href={`/items/new?orderId=${orderId}`} passHref>
+              <Button variant="btn btn-dark">Add Item</Button>
+            </Link>
+          </>
+        )}
       </div>
     </article>
   );
