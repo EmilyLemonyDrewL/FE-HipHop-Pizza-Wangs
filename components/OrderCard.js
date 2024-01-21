@@ -26,7 +26,7 @@ const OrderCard = ({
   }
 
   function endOrder() {
-    router.push(`orders/close/${id}`);
+    router.push(`orders/edit/close/${id}`);
   }
 
   return (

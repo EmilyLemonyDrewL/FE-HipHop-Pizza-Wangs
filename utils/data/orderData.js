@@ -1,7 +1,7 @@
 import { clientCredentials } from '../client';
 
-const getOrders = () => new Promise((resolve, reject) => {
-  fetch(`${clientCredentials.databaseURL}/orders`, {
+const getOrders = (uid) => new Promise((resolve, reject) => {
+  fetch(`${clientCredentials.databaseURL}/orders?uid=${uid}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -45,6 +45,11 @@ const createOrder = (order) => new Promise((resolve, reject) => {
 });
 
 const updateOrder = (payload) => new Promise((resolve, reject) => {
+  if (!payload.id) {
+    reject(new Error('Order ID is undefined'));
+    return;
+  }
+
   fetch(`${clientCredentials.databaseURL}/orders/${payload.id}`, {
     method: 'PUT',
     headers: {
@@ -52,12 +57,14 @@ const updateOrder = (payload) => new Promise((resolve, reject) => {
     },
     body: JSON.stringify(payload),
   })
-    .then((data) => {
-      if (data) {
-        resolve(data);
-      } else {
-        resolve([]);
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Failed to update order: ${response.status}`);
       }
+      return response.json();
+    })
+    .then((data) => {
+      resolve(data);
     })
     .catch(reject);
 });

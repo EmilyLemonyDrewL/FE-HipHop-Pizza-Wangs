@@ -1,66 +1,71 @@
-// import React, { useState, useEffect } from 'react';
-// import Form from 'react-bootstrap/Form';
-// import { useRouter } from 'next/router';
-// import { Button, FloatingLabel } from 'react-bootstrap';
-// import { useAuth } from '../utils/context/authContext';
-// import { updateOrder, getSingleOrder, closeOutOrder } from '../utils/data/orderData';
+import React, { useState } from 'react';
+import { Form, Button } from 'react-bootstrap';
+import PropTypes from 'prop-types';
+import { useRouter } from 'next/router';
+import { updateOrder } from '../utils/data/orderData';
+import { useAuth } from '../utils/context/authContext';
 
-// const initialState = {
-//   payment_type: '',
-//   tip_amount: 0,
-//   date_of_order_closure: '2024-01-01',
-// };
+const CloseOrderForm = ({ orderObj }) => {
+  const [paymentType, setPaymentType] = useState('');
+  const [tipAmount, setTipAmount] = useState(0);
+  const { user } = useAuth();
+  const router = useRouter();
 
-// function CloseOrderForm({ orderObj }) {
-//   const [closeOrderInput, setCloseOrderInput] = useState(initialState);
-//   const [orderDetails, setOrderDetails] = useState({});
-//   const router = useRouter();
-//   const { user } = useAuth();
-//   const { id } = router.query;
-//   const currentdate = new Date().toISOString().split('T')[0];
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-//   useEffect(() => {
-//     if (id) {
-//       getSingleOrder(id).then(setOrderDetails);
-//     }
-//   }, [id]);
+    const orderUpdate = {
+      id: orderObj.id,
+      status: 'Closed',
+      payment_type: paymentType,
+      date_of_order_closure: new Date().toISOString().split('T')[0],
+      cashierId: user.uid, // may need to be cashierId
+      tip_amount: tipAmount,
+      customer_name: orderObj.customer_name,
+      customer_phone: orderObj.customer_phone,
+      customer_email: orderObj.customer_email,
+      order_type: orderObj.order_type,
+    };
 
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-//     setCloseOrderInput((prevState) => ({
-//       ...prevState,
-//       [name]: value,
-//     }));
-//   };
+    updateOrder(orderUpdate)
+      .then(() => {
+        router.push('/orders');
+      })
+      .catch((error) => {
+        console.error('Error updating order:', error);
+      });
+  };
 
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     closeOutOrder({ ...closeOrderInput, date_of_order_closure: currentdate, id });
-//     updateOrder({ ...orderDetails, open: false, id });
-//     router.push(`/orders/${id}`);
-//   };
+  return (
+    <Form onSubmit={handleSubmit}>
+      <Form.Group controlId="paymentTypeInput">
+        <Form.Label>Payment Type</Form.Label>
+        <Form.Control
+          type="text"
+          placeholder="Enter payment type"
+          value={paymentType}
+          onChange={(e) => setPaymentType(e.target.value)}
+        />
+      </Form.Group>
 
-//   return (
-//     <div>
-//       <Form onSubmit={handleSubmit}>
-//         <h2 className="text-white mt-5">Close Order</h2>
+      <Form.Group controlId="tipAmountInput">
+        <Form.Label>Tip Amount</Form.Label>
+        <Form.Control
+          type="number"
+          placeholder="Enter tip amount"
+          value={tipAmount}
+          onChange={(e) => setTipAmount(parseFloat(e.target.value) || 0)}
+        />
+      </Form.Group>
 
-//         <FloatingLabel controlId="paymentTypeSelect" label="Payment Type" className="mb-3">
-//           <Form.Select name="payment_type" onChange={handleChange} value={closeOrderInput.payment_type}>
-//             <option value="">Select Payment Type</option>
-//             <option value="Credit/Debit">Credit/Debit</option>
-//             <option value="Cash">Cash</option>
-//           </Form.Select>
-//         </FloatingLabel>
+      <Button variant="btn btn-dark" type="submit">Close Order</Button>
+    </Form>
+  );
+};
 
-//         <FloatingLabel controlId="FloatingInput1" label="Enter Tip Amount" className="mb-3">
-//           <Form.Control type="number" placeholder="Enter Tip Amount" name="tip_amount" value={closeOrderInput.tip_amount || ''} onChange={handleChange} required />
-//         </FloatingLabel>
+CloseOrderForm.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  orderObj: PropTypes.object.isRequired,
+};
 
-//         <Button type="submit">Close</Button>
-//       </Form>
-//     </div>
-//   );
-// }
-
-// export default CloseOrderForm;
+export default CloseOrderForm;

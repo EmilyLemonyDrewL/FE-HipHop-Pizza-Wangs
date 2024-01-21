@@ -147,8 +147,7 @@ OrderForm.propTypes = {
     customer_email: PropTypes.string,
     customer_phone: PropTypes.number,
     order_type: PropTypes.string,
-    // eslint-disable-next-line react/forbid-prop-types
-    cashier: PropTypes.object,
+    cashier: PropTypes.number,
   }),
 };
 
