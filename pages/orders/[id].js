@@ -8,10 +8,10 @@ import ItemCard from '../../components/ItemCard';
 function SingleOrder() {
   const [singleOrder, setSingleOrder] = useState({});
   const router = useRouter();
-  const orderone = router.query.id;
+  const orderId = router.query.id; // Change variable name to orderId
   useEffect(() => {
-    getSingleOrder(orderone).then((data) => setSingleOrder(data));
-  }, [orderone]);
+    getSingleOrder(orderId).then((data) => setSingleOrder(data));
+  }, [orderId]);
 
   return (
     <article className="single-order">
@@ -32,7 +32,7 @@ function SingleOrder() {
             <p>No items found</p>
           )}
         </div>
-        <Link href={`/items/new?orderId=${orderone}`} passHref>
+        <Link href={`/items/new?orderId=${orderId}`} passHref>
           <Button variant="btn btn-dark">Add Item</Button>
         </Link>
       </div>
