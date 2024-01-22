@@ -56,6 +56,27 @@ const updateOrderItem = (orderItem) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
+const getItemsBasedOnOrder = async (orderId) => {
+  try {
+    const orderItems = await getOrderItems(orderId);
+
+    // Fetch item details for each order item
+    const itemDetailsPromises = orderItems.map(async (orderItem) => {
+      const response = await fetch(`${clientCredentials.databaseURL}/items/${orderItem.item}`);
+      const itemDetails = await response.json();
+      return { ...itemDetails, quantity: orderItem.quantity };
+    });
+
+    // Wait for all item details promises to resolve
+    const itemDetails = await Promise.all(itemDetailsPromises);
+
+    return itemDetails;
+  } catch (error) {
+    console.error('Error fetching order items:', error);
+    throw error;
+  }
+};
+
 export {
-  getOrderItems, deleteOrderItem, createOrderItem, updateOrderItem,
+  getOrderItems, deleteOrderItem, createOrderItem, updateOrderItem, getItemsBasedOnOrder,
 };
