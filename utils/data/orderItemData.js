@@ -44,7 +44,7 @@ const createOrderItem = (orderItem) => new Promise((resolve, reject) => {
 });
 
 const updateOrderItem = (orderItem) => new Promise((resolve, reject) => {
-  fetch(`${clientCredentials.databaseURL}/oreder_items`, {
+  fetch(`${clientCredentials.databaseURL}/order_items`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

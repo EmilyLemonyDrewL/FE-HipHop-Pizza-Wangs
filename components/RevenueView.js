@@ -1,79 +1,53 @@
-/* eslint-disable no-console */
 import React, { useState, useEffect } from 'react';
-import { getAllClosedOrders } from '../utils/data/orderData';
-import { getItemsBasedOnOrder } from '../utils/data/orderItemData';
+import { getTotalRevenue, getTotalRevenueWithTip } from '../utils/data/orderData';
 
-const RevenueView = () => {
-  const [closedOrders, setClosedOrders] = useState([]);
-  const [totalRevenue, setTotalRevenue] = useState(0);
-
-  useEffect(() => {
-    const fetchClosedOrders = async () => {
-      try {
-        const orders = await getAllClosedOrders();
-        setClosedOrders(orders);
-      } catch (error) {
-        console.error('Error fetching closed orders:', error);
-      }
-    };
-
-    fetchClosedOrders();
-  }, []); // This useEffect runs once on component mount to fetch closed orders
+const TotalRevenueComponent = () => {
+  const [totalRevenue, setTotalRevenue] = useState(null);
+  const [revenueWithTip, setRevenueWithTip] = useState(null);
 
   useEffect(() => {
-    const calculateTotalRevenue = async () => {
-      try {
-        const calculatedTotal = await Promise.all(
-          closedOrders.map(async (order) => {
-            const orderItems = await getItemsBasedOnOrder(order.id);
-            console.log('Order ID:', order.id);
-            console.log('Order Items:', orderItems);
+    getTotalRevenue()
+      .then((data) => {
+        // after getting the revenue of each order, I need to get the sum of all totals together
+        const total = Object.values(data.total_revenue_per_order).reduce((acc, cur) => acc + cur, 0);
+        setTotalRevenue(total);
+      })
+      .catch((error) => {
+        console.error('Error fetching total revenue:', error);
+      });
+  }, []);
 
-            const orderTotal = orderItems.reduce((itemTotal, item) => {
-              console.log('Item:', item);
-              const itemPrice = parseFloat(item.price);
-              const itemQuantity = parseFloat(item.quantity);
-
-              console.log('Item Price:', itemPrice);
-              console.log('Item Quantity:', itemQuantity);
-
-              if (!Number.isNaN(itemPrice) && !Number.isNaN(itemQuantity)) {
-                const parsedPrice = parseFloat(itemPrice);
-                const parsedQuantity = parseFloat(itemQuantity);
-
-                console.log('Parsed Price:', parsedPrice);
-                console.log('Parsed Quantity:', parsedQuantity);
-
-                return itemTotal + parsedQuantity * parsedPrice;
-              }
-
-              return itemTotal;
-            }, 0);
-
-            console.log('Order Total:', orderTotal);
-            return orderTotal;
-          }),
-        );
-
-        console.log('Calculated Total:', calculatedTotal);
-
-        const totalRevenueResult = calculatedTotal.reduce((acc, value) => acc + value, 0).toFixed(2);
-        console.log('Total Revenue:', totalRevenueResult);
-        setTotalRevenue(totalRevenueResult);
-      } catch (error) {
-        console.error('Error calculating total revenue:', error);
-      }
-    };
-
-    calculateTotalRevenue();
-  }, [closedOrders]); // This useEffect recalculates total revenue whenever closedOrders changes
+  useEffect(() => {
+    getTotalRevenueWithTip()
+      .then((data) => {
+        const total = Object.values(data.total_revenue_per_order_with_tip).reduce((acc, cur) => acc + cur, 0);
+        setRevenueWithTip(total);
+      })
+      .catch((error) => {
+        console.error('Error fetching total revenue with tip:', error);
+      });
+  }, []);
 
   return (
     <div>
-      <h1>Total Revenue from Closed Orders</h1>
-      <p>Total Revenue: ${totalRevenue}</p>
+      <div>
+        <h2>Total Revenue without tips</h2>
+        {totalRevenue !== null ? (
+          <p>Amount: ${totalRevenue.toFixed(2)}</p>
+        ) : (
+          <p>Loading total revenue...</p>
+        )}
+      </div>
+      <div>
+        <h2>Total Revenue with tips</h2>
+        {revenueWithTip !== null ? (
+          <p>Amount: ${revenueWithTip.toFixed(2)}</p>
+        ) : (
+          <p>Loading total revenue...</p>
+        )}
+      </div>
     </div>
   );
 };
 
-export default RevenueView;
+export default TotalRevenueComponent;
