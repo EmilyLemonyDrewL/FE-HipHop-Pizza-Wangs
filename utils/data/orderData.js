@@ -115,7 +115,41 @@ const getItemsByOrderId = async (orderId) => {
   }
 };
 
+const getTotalRevenue = () => new Promise((resolve, reject) => {
+  fetch(`${clientCredentials.databaseURL}/orders/total-revenue`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Failed to fetch total revenue: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(resolve)
+    .catch(reject);
+});
+
+const getTotalRevenueWithTip = () => new Promise((resolve, reject) => {
+  fetch(`${clientCredentials.databaseURL}/orders/total-revenue-with-tip`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Failed to fetch total revenue with tip: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(resolve)
+    .catch(reject);
+});
+
 // eslint-disable-next-line import/prefer-default-export
 export {
-  getOrders, getSingleOrder, createOrder, updateOrder, deleteOrder, getSingleOrderItems, closeOutOrder, getAllClosedOrders, getItemsByOrderId,
+  getOrders, getSingleOrder, createOrder, updateOrder, deleteOrder, getSingleOrderItems, closeOutOrder, getAllClosedOrders, getItemsByOrderId, getTotalRevenue, getTotalRevenueWithTip,
 };
